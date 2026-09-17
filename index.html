@@ -20,24 +20,24 @@
         }
         * { box-sizing: border-box; font-family: 'Mali', cursive, sans-serif; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
         
-        /* ล็อกไม่ให้หน้าเว็บหลักเด้งหรือรีเฟรชเวลาดึงลงบน iPhone */
+        /* ล็อกไม่ให้หน้าเว็บหลักขยับหรือรีเฟรชบน iPhone 100% */
         html, body {
             background-color: var(--bg-color);
             background-image: radial-gradient(#3a3027 1px, transparent 1px), radial-gradient(#2d241d 1px, var(--bg-color) 1px);
             background-size: 40px 40px; background-position: 0 0, 20px 20px;
-            color: var(--text-main); margin: 0; padding: 12px;
+            color: var(--text-main); margin: 0; padding: 0;
+            width: 100vw; height: 100vh; height: -webkit-fill-available;
+            position: fixed; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; min-height: -webkit-fill-available; 
-            overflow: hidden; /* ป้องกันหน้าจอหลักเลื่อนทะลุ */
-            overscroll-behavior-y: none; /* ป้องกันการดึงรีเฟรชของ Safari */
+            overscroll-behavior-y: none;
         }
 
         .container {
             background-color: var(--card-bg); border: 3px solid var(--card-border);
             padding: 20px 16px; border-radius: 16px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(140, 109, 72, 0.15);
-            width: 100%; max-width: 400px; position: relative;
-            max-height: 95vh; display: flex; flex-direction: column;
+            width: 92%; max-width: 400px; max-height: 90vh; position: relative;
+            display: flex; flex-direction: column;
         }
         .container::before {
             content: "🕵️‍♂️ DETECTIVE CLUB"; position: absolute; top: -16px; left: 50%;
@@ -79,11 +79,11 @@
         }
         
         .names-scroll { 
-            max-height: 236px; 
+            max-height: 220px; 
             overflow-y: auto; 
             margin-bottom: 8px; 
             padding-right: 2px; 
-            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
         }
         
         .name-input-row { display: flex; align-items: center; margin-bottom: 6px; gap: 6px; }
@@ -105,11 +105,11 @@
         .screen.active { display: block; }
         
         .player-scroll { 
-            max-height: 310px; 
+            max-height: 280px; 
             overflow-y: auto; 
             margin-bottom: 12px; 
             padding-right: 2px; 
-            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
         }
         
         .player-card {
@@ -131,7 +131,7 @@
         }
         .secret-box.imposter { background: #fdf2f0; border-color: var(--accent); color: var(--accent); }
         .tap-to-reveal {
-            background: #fdfbf7; border: 2px dashed var(--card-border); border-radius: 12px;
+            background: #fdfbf7; border: 2.5px dashed var(--card-border); border-radius: 12px;
             padding: 24px 16px; text-align: center; margin: 12px 0; cursor: pointer;
         }
     </style>
@@ -203,24 +203,6 @@
     let currentMode = 'pure'; 
     let lastImposterIndex = -1; 
 
-    // ป้องกันการดึงหน้าจอลงเพื่อรีเฟรชบน iPhone (Safari)
-    document.addEventListener('touchmove', function(e) {
-        if (e.scale !== 1) { return; }
-        // อนุญาตให้เลื่อนเฉพาะในกล่อง scroll เท่านั้น ส่วนอื่นห้ามดึงรีเฟรช
-        let target = e.target;
-        let isScrollable = false;
-        while (target !== document.body && target !== null) {
-            if (target.classList && (target.classList.contains('names-scroll') || target.classList.contains('player-scroll'))) {
-                isScrollable = true;
-                break;
-            }
-            target = target.parentElement;
-        }
-        if (!isScrollable) {
-            e.preventDefault();
-        }
-    }, { passive: false });
-
     function setMode(mode) {
         currentMode = mode;
         document.getElementById('mode-pure').classList.toggle('active', mode === 'pure');
@@ -251,7 +233,6 @@
         const wordInput = document.getElementById('secret-word').value.trim();
         const nameInputs = document.querySelectorAll('.player-name-input');
         players = [];
-        nameInputs.force = false;
         nameInputs.forEach((input, index) => { players.push(input.value.trim() || `นักสืบ ${index + 1}`); });
         if (players.length < 3) { alert("กรุณาใส่จำนวนคนเล่นอย่างน้อย 3 คนครับ"); return; }
         if (wordInput === "") { alert("กรุณากรอกคำใบ้ลับครับ"); return; }
@@ -308,7 +289,8 @@
     function switchScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
-        window.scrollTo(0, 0);
+        const container = document.querySelector('.container');
+        if (container) container.scrollTop = 0;
     }
     function resetGame() { switchScreen('setup-screen'); }
 </script>
