@@ -33,10 +33,13 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(140, 109, 72, 0.15);
             width: 100%; max-width: 400px; position: relative;
         }
+        /* ขยายป้ายหัวข้อ DETECTIVE CLUB ให้ใหญ่และเด่นขึ้น */
         .container::before {
-            content: "🕵️‍♂️ DETECTIVE CLUB"; position: absolute; top: -12px; left: 50%;
+            content: "🕵️‍♂️ DETECTIVE CLUB"; position: absolute; top: -16px; left: 50%;
             transform: translateX(-50%); background: var(--primary); color: #f4ebd0;
-            padding: 2px 14px; font-size: 0.7rem; font-weight: 700; border-radius: 4px; border: 1px solid #d4af37;
+            padding: 5px 18px; font-size: 0.85rem; font-weight: 700; border-radius: 6px; border: 1.5px solid #d4af37;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
         }
         h2 { margin-top: 5px; text-align: center; color: var(--primary); font-weight: 700; font-size: 1.5rem; margin-bottom: 4px; text-transform: uppercase; }
         .subtitle { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 18px; line-height: 1.4; }
@@ -67,23 +70,20 @@
             display: flex; justify-content: space-between; align-items: center;
         }
         .player-card.viewed { background: var(--success-bg); border-color: var(--success); }
-        
-        /* แก้ไขส่วนจัดระยะห่างชื่อกับสถานะ */
-        .player-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px; /* เพิ่มระยะห่างระหว่างชื่อกับสถานะ */
-        }
+        .player-info { display: flex; flex-direction: column; gap: 4px; }
         .player-name { font-weight: 700; font-size: 0.92rem; color: var(--primary); }
         .player-status { font-size: 0.75rem; color: var(--text-muted); }
         .player-card.viewed .player-status { color: var(--success); font-weight: 600; }
-        
         .btn-sm { padding: 6px 12px; font-size: 0.78rem; width: auto; border-radius: 6px; }
+        
+        /* ขยายกล่องและตัวหนังสือคำลับให้ใหญ่ขึ้นชัดเจน */
         .secret-box {
-            background: #ffffff; border: 2px dashed var(--primary); padding: 22px 16px;
-            text-align: center; border-radius: 10px; font-size: 1.15rem; font-weight: 700; color: var(--primary); margin: 18px 0;
+            background: #ffffff; border: 2.5px dashed var(--primary); padding: 28px 16px;
+            text-align: center; border-radius: 12px; font-size: 1.4rem; font-weight: 700; color: var(--primary); margin: 18px 0;
+            line-height: 1.5;
         }
         .secret-box.imposter { background: #fdf2f0; border-color: var(--accent); color: var(--accent); }
+        
         .tap-to-reveal {
             background: #fdfbf7; border: 2px dashed var(--card-border); border-radius: 12px;
             padding: 30px 20px; text-align: center; margin: 15px 0; cursor: pointer;
@@ -167,7 +167,7 @@
         secretWord = wordInput;
         roles = new Array(players.length).fill(secretWord);
         const blankIndex = Math.floor(Math.random() * players.length);
-        roles[blankIndex] = "❌ คุณคือผู้สมรู้ร่วมคิด!<br><span style='font-size:0.85rem; font-weight:normal;'>คุณไม่มีคำใบ้! ต้องเนียนทำเป็นรู้เรื่อง!</span>";
+        roles[blankIndex] = "❌ คุณคือผู้สมรู้ร่วมคิด!<br><span style='font-size:0.95rem; font-weight:normal; display:inline-block; margin-top:6px;'>คุณไม่มีคำใบ้! ต้องเนียนทำเป็นรู้เรื่อง!</span>";
         viewedStatus = new Array(players.length).fill(false);
         renderPlayerList();
         switchScreen('players-screen');
