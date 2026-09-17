@@ -43,10 +43,16 @@
         .subtitle { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 18px; line-height: 1.4; }
         .form-group { margin-bottom: 15px; }
         
-        .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .header-action-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
         label { font-weight: 600; font-size: 0.88rem; color: var(--primary); margin: 0; }
-        .btn-clear-text { background: none; border: none; color: var(--accent); font-size: 0.78rem; font-weight: 700; cursor: pointer; padding: 0; text-decoration: underline; }
         
+        /* ปุ่มล้างชื่อสไตล์ชัดเจน */
+        .btn-clear-box {
+            background: #e8dcc4; border: 1.5px solid var(--card-border); color: var(--accent);
+            font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; cursor: pointer;
+        }
+        .btn-clear-box:active { background: #dfcfb2; }
+
         input[type="number"], input[type="text"] {
             width: 100%; padding: 12px 14px; border: 2px solid var(--card-border);
             border-radius: 8px; font-size: 0.95rem; background: #fdfbf7; color: var(--text-main);
@@ -99,9 +105,9 @@
             <input type="number" id="player-count" pattern="[0-9]*" inputmode="numeric" min="3" max="15" value="4" oninput="generateNameInputs()">
         </div>
         <div class="form-group">
-            <div class="label-row">
+            <div class="header-action-row">
                 <label>รายชื่อสมาชิกชมรม</label>
-                <button type="button" class="btn-clear-text" onclick="clearAllNames()">🧹 ล้างชื่อทั้งหมด</button>
+                <button type="button" class="btn-clear-box" onclick="clearAllNames()">🗑️ ล้างชื่อทั้งหมด</button>
             </div>
             <div class="names-scroll" id="name-inputs-container"></div>
         </div>
