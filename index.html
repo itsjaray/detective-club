@@ -52,6 +52,31 @@
         }
         .btn-clear-box:active { background: #dfcfb2; }
 
+        /* สไตล์ปุ่มเลือกโหมดการสุ่ม */
+        .mode-selector {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 2px solid var(--card-border);
+            background: #fdfbf7;
+            color: var(--text-muted);
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .mode-btn.active {
+            background: var(--primary);
+            color: #f4ebd0;
+            border-color: #1b2f27;
+        }
+
         input[type="number"], input[type="text"] {
             width: 100%; padding: 12px 14px; border: 2px solid var(--card-border);
             border-radius: 8px; font-size: 0.95rem; background: #fdfbf7; color: var(--text-main);
@@ -99,6 +124,15 @@
     <div id="setup-screen" class="screen active">
         <h2>บันทึกคดีลับ</h2>
         <div class="subtitle">ระบุจำนวนนักสืบและรายชื่อเพื่อเริ่มสืบสวน</div>
+        
+        <div class="form-group">
+            <label>ระบบสุ่มบทบาท</label>
+            <div class="mode-selector">
+                <div id="mode-pure" class="mode-btn active" onclick="setMode('pure')">🎲 สุ่มเพียวๆ (ดวงล้วน)</div>
+                <div id="mode-anti" class="mode-btn" onclick="setMode('anti')">🛡️ ลดโอกาสซ้ำติดกัน</div>
+            </div>
+        </div>
+
         <div class="form-group">
             <label for="player-count">จำนวนนักสืบ (คน)</label>
             <input type="number" id="player-count" pattern="[0-9]*" inputmode="numeric" min="3" max="15" value="4" oninput="generateNameInputs()">
@@ -149,7 +183,14 @@
 
 <script>
     let players = []; let secretWord = ""; let roles = []; let viewedStatus = []; let currentPlayerIndex = 0;
-    let lastImposterIndex = -1; // ตัวแปรจำคนที่เป็นตาที่แล้ว เพื่อป้องกันการออกซ้ำติดกัน
+    let currentMode = 'pure'; // ค่าเริ่มต้นเป็นแบบสุ่มเพียวๆ ('pure' หรือ 'anti')
+    let lastImposterIndex = -1; // สำหรับโหมดลดโอกาสซ้ำ
+
+    function setMode(mode) {
+        currentMode = mode;
+        document.getElementById('mode-pure').classList.toggle('active', mode === 'pure');
+        document.getElementById('mode-anti').classList.toggle('active', mode === 'anti');
+    }
 
     function generateNameInputs(keepValues = true) {
         const count = parseInt(document.getElementById('player-count').value) || 4;
@@ -181,13 +222,19 @@
         secretWord = wordInput;
         roles = new Array(players.length).fill(secretWord);
 
-        // ระบบสุ่มป้องกันการออกซ้ำคนเดิมติดกัน (ถ้ามีคนเล่นมากกว่า 3 คนขึ้นไป)
         let blankIndex = Math.floor(Math.random() * players.length);
-        if (players.length > 3 && blankIndex === lastImposterIndex) {
-            // สุ่มใหม่อีกรอบถ้าดันซ้ำกับคนตาที่แล้ว เพื่อความแฟร์
-            blankIndex = Math.floor(Math.random() * players.length);
+
+        // เช็คเงื่อนไขตามโหมดที่เลือก
+        if (currentMode === 'anti') {
+            // โหมดลดโอกาสซ้ำ: ถ้าซ้ำกับตาที่แล้ว (และคนเล่นมากกว่า 3 คน) ให้สุ่มใหม่รอบนึง
+            if (players.length > 3 && blankIndex === lastImposterIndex) {
+                blankIndex = Math.floor(Math.random() * players.length);
+            }
+            lastImposterIndex = blankIndex;
+        } else {
+            // โหมดสุ่มเพียวๆ รีเซ็ตค่าจำ
+            lastImposterIndex = -1;
         }
-        lastImposterIndex = blankIndex; // บันทึกไว้จำสำหรับตาหน้า
 
         roles[blankIndex] = "❌ คุณคือผู้สมรู้ร่วมคิด!<br><span style='font-size:0.95rem; font-weight:normal; display:inline-block; margin-top:6px;'>คุณไม่มีคำใบ้! ต้องเนียนทำเป็นรู้เรื่อง!</span>";
         viewedStatus = new Array(players.length).fill(false);
