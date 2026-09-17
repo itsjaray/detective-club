@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Detective Club - ชมรมยอดนักสืบ</title>
-    <!-- ดึงฟอนต์ลายมือสไตล์สมุดบันทึก (Mali) จาก Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,7 +18,6 @@
             --success: #386641;
             --success-bg: rgba(56, 102, 65, 0.12);
         }
-        /* เปลี่ยนฟอนต์หลักทั้งเว็บให้เป็นฟอนต์ลายมือ */
         * { box-sizing: border-box; font-family: 'Mali', cursive, sans-serif; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
         body {
             background-color: var(--bg-color);
@@ -78,22 +76,24 @@
             border-color: #1b2f27;
         }
 
+        /* เพิ่มพื้นที่ด้านบน/ล่างใน input เพื่อไม่ให้สระหรือวรรณยุกต์ชนขอบ */
         input[type="number"], input[type="text"] {
-            width: 100%; padding: 12px 14px; border: 2px solid var(--card-border);
+            width: 100%; padding: 10px 14px 6px 14px; border: 2px solid var(--card-border);
             border-radius: 8px; font-size: 1rem; background: #fdfbf7; color: var(--text-main);
             -webkit-user-select: text; user-select: text; outline: none;
+            line-height: 1.5;
         }
         
         .names-scroll { 
-            max-height: 215px; 
+            max-height: 225px; 
             overflow-y: auto; 
             margin-bottom: 12px; 
             padding-right: 2px; 
         }
         
-        .name-input-row { display: flex; align-items: center; margin-bottom: 6px; gap: 8px; }
+        .name-input-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
         .name-input-row span { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); min-width: 20px; text-align: right; }
-        .name-input-row input { padding: 8px 12px; font-size: 0.95rem; border-radius: 6px; }
+        .name-input-row input { padding: 8px 12px 4px 12px; font-size: 0.95rem; border-radius: 6px; }
         
         .btn {
             background: var(--primary); color: #f4ebd0; border: 2px solid #1b2f27;
