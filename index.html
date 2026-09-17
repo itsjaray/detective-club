@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Detective Club - ชมรมยอดนักสืบ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- ดึงฟอนต์ลายมือสไตล์สมุดบันทึก (Mali) จาก Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #1f1a17;
@@ -18,7 +19,8 @@
             --success: #386641;
             --success-bg: rgba(56, 102, 65, 0.12);
         }
-        * { box-sizing: border-box; font-family: 'Prompt', sans-serif; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+        /* เปลี่ยนฟอนต์หลักทั้งเว็บให้เป็นฟอนต์ลายมือ */
+        * { box-sizing: border-box; font-family: 'Mali', cursive, sans-serif; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
         body {
             background-color: var(--bg-color);
             background-image: radial-gradient(#3a3027 1px, transparent 1px), radial-gradient(#2d241d 1px, var(--bg-color) 1px);
@@ -39,16 +41,16 @@
             padding: 5px 18px; font-size: 0.85rem; font-weight: 700; border-radius: 6px; border: 1.5px solid #d4af37;
             letter-spacing: 0.5px; white-space: nowrap;
         }
-        h2 { margin-top: 5px; text-align: center; color: var(--primary); font-weight: 700; font-size: 1.5rem; margin-bottom: 4px; text-transform: uppercase; }
-        .subtitle { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 18px; line-height: 1.4; }
+        h2 { margin-top: 5px; text-align: center; color: var(--primary); font-weight: 700; font-size: 1.6rem; margin-bottom: 4px; text-transform: uppercase; }
+        .subtitle { text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px; line-height: 1.4; }
         .form-group { margin-bottom: 15px; }
         
         .header-action-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        label { font-weight: 600; font-size: 0.88rem; color: var(--primary); margin: 0; }
+        label { font-weight: 600; font-size: 0.95rem; color: var(--primary); margin: 0; }
         
         .btn-clear-box {
             background: #e8dcc4; border: 1.5px solid var(--card-border); color: var(--accent);
-            font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; cursor: pointer;
+            font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; cursor: pointer;
         }
         .btn-clear-box:active { background: #dfcfb2; }
 
@@ -60,7 +62,7 @@
         .mode-btn {
             flex: 1;
             padding: 8px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 600;
             border: 2px solid var(--card-border);
             background: #fdfbf7;
@@ -78,7 +80,7 @@
 
         input[type="number"], input[type="text"] {
             width: 100%; padding: 12px 14px; border: 2px solid var(--card-border);
-            border-radius: 8px; font-size: 0.95rem; background: #fdfbf7; color: var(--text-main);
+            border-radius: 8px; font-size: 1rem; background: #fdfbf7; color: var(--text-main);
             -webkit-user-select: text; user-select: text; outline: none;
         }
         
@@ -90,12 +92,12 @@
         }
         
         .name-input-row { display: flex; align-items: center; margin-bottom: 6px; gap: 8px; }
-        .name-input-row span { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); min-width: 20px; text-align: right; }
-        .name-input-row input { padding: 8px 12px; font-size: 0.9rem; border-radius: 6px; }
+        .name-input-row span { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); min-width: 20px; text-align: right; }
+        .name-input-row input { padding: 8px 12px; font-size: 0.95rem; border-radius: 6px; }
         
         .btn {
             background: var(--primary); color: #f4ebd0; border: 2px solid #1b2f27;
-            padding: 14px; width: 100%; border-radius: 8px; font-size: 1rem; font-weight: 700;
+            padding: 14px; width: 100%; border-radius: 8px; font-size: 1.05rem; font-weight: 700;
             cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px;
         }
         .btn:active { transform: scale(0.97); }
@@ -103,7 +105,6 @@
         .screen { display: none; }
         .screen.active { display: block; }
         
-        /* ปรับความสูงหน้าสมุดบันทึกนักสืบให้โชว์ครบ 4 คนพอดีเป๊ะ (ประมาณ 275px) */
         .player-scroll { 
             max-height: 275px; 
             overflow-y: auto; 
@@ -118,13 +119,13 @@
         }
         .player-card.viewed { background: var(--success-bg); border-color: var(--success); }
         .player-info { display: flex; flex-direction: column; gap: 4px; }
-        .player-name { font-weight: 700; font-size: 0.92rem; color: var(--primary); }
-        .player-status { font-size: 0.75rem; color: var(--text-muted); }
+        .player-name { font-weight: 700; font-size: 1rem; color: var(--primary); }
+        .player-status { font-size: 0.8rem; color: var(--text-muted); }
         .player-card.viewed .player-status { color: var(--success); font-weight: 600; }
-        .btn-sm { padding: 6px 12px; font-size: 0.78rem; width: auto; border-radius: 6px; }
+        .btn-sm { padding: 6px 12px; font-size: 0.85rem; width: auto; border-radius: 6px; }
         .secret-box {
             background: #ffffff; border: 2.5px dashed var(--primary); padding: 28px 16px;
-            text-align: center; border-radius: 12px; font-size: 1.4rem; font-weight: 700; color: var(--primary); margin: 18px 0;
+            text-align: center; border-radius: 12px; font-size: 1.5rem; font-weight: 700; color: var(--primary); margin: 18px 0;
             line-height: 1.5;
         }
         .secret-box.imposter { background: #fdf2f0; border-color: var(--accent); color: var(--accent); }
@@ -143,8 +144,8 @@
         <div class="form-group">
             <label>ระบบสุ่มบทบาท</label>
             <div class="mode-selector">
-                <div id="mode-pure" class="mode-btn active" onclick="setMode('pure')">🎲 สุ่มเพียวๆ (ดวงล้วน)</div>
-                <div id="mode-anti" class="mode-btn" onclick="setMode('anti')">🛡️ ลดโอกาสซ้ำติดกัน</div>
+                <div id="mode-pure" class="mode-btn active" onclick="setMode('pure')">🎲 สุ่มเพียวๆ</div>
+                <div id="mode-anti" class="mode-btn" onclick="setMode('anti')">🛡️ ลดโอกาสซ้ำ</div>
             </div>
         </div>
 
@@ -179,8 +180,8 @@
         <div class="subtitle">แตะที่กรอบด้านล่างเพื่อส่องดูหลักฐาน</div>
         <div id="hidden-view" class="tap-to-reveal" onclick="showSecret()">
             <div style="font-size: 2.2rem; margin-bottom: 6px;">🔍</div>
-            <div style="font-weight: 700; color: var(--primary); font-size: 0.95rem;">แตะเพื่อส่องดูคำใบ้ลับ</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">ระวังผู้สมรู้ร่วมคิดแอบมองนะ!</div>
+            <div style="font-weight: 700; color: var(--primary); font-size: 1rem;">แตะเพื่อส่องดูคำใบ้ลับ</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">ระวังผู้สมรู้ร่วมคิดแอบมองนะ!</div>
         </div>
         <div id="secret-view" style="display: none;">
             <div class="secret-box" id="secret-display">คำลับ</div>
@@ -248,7 +249,7 @@
             lastImposterIndex = -1;
         }
 
-        roles[blankIndex] = "❌ คุณคือผู้สมรู้ร่วมคิด!<br><span style='font-size:0.95rem; font-weight:normal; display:inline-block; margin-top:6px;'>คุณไม่มีคำใบ้! ต้องเนียนทำเป็นรู้เรื่อง!</span>";
+        roles[blankIndex] = "❌ คุณคือผู้สมรู้ร่วมคิด!<br><span style='font-size:1rem; font-weight:normal; display:inline-block; margin-top:6px;'>คุณไม่มีคำใบ้! ต้องเนียนทำเป็นรู้เรื่อง!</span>";
         viewedStatus = new Array(players.length).fill(false);
         renderPlayerList();
         switchScreen('players-screen');
