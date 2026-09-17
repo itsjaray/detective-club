@@ -52,7 +52,6 @@
         }
         .btn-clear-box:active { background: #dfcfb2; }
 
-        /* สไตล์ปุ่มเลือกโหมดการสุ่ม */
         .mode-selector {
             display: flex;
             gap: 8px;
@@ -82,10 +81,19 @@
             border-radius: 8px; font-size: 0.95rem; background: #fdfbf7; color: var(--text-main);
             -webkit-user-select: text; user-select: text; outline: none;
         }
-        .names-scroll { max-height: 160px; overflow-y: auto; margin-bottom: 12px; padding-right: 2px; }
+        
+        /* ปรับความสูงให้โชว์ครบ 4 คนพอดีเป๊ะ (ประมาณ 210px) และเลื่อนเมื่อเกิน 4 คน */
+        .names-scroll { 
+            max-height: 215px; 
+            overflow-y: auto; 
+            margin-bottom: 12px; 
+            padding-right: 2px; 
+        }
+        
         .name-input-row { display: flex; align-items: center; margin-bottom: 6px; gap: 8px; }
         .name-input-row span { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); min-width: 20px; text-align: right; }
         .name-input-row input { padding: 8px 12px; font-size: 0.9rem; border-radius: 6px; }
+        
         .btn {
             background: var(--primary); color: #f4ebd0; border: 2px solid #1b2f27;
             padding: 14px; width: 100%; border-radius: 8px; font-size: 1rem; font-weight: 700;
@@ -183,8 +191,8 @@
 
 <script>
     let players = []; let secretWord = ""; let roles = []; let viewedStatus = []; let currentPlayerIndex = 0;
-    let currentMode = 'pure'; // ค่าเริ่มต้นเป็นแบบสุ่มเพียวๆ ('pure' หรือ 'anti')
-    let lastImposterIndex = -1; // สำหรับโหมดลดโอกาสซ้ำ
+    let currentMode = 'pure'; 
+    let lastImposterIndex = -1; 
 
     function setMode(mode) {
         currentMode = mode;
@@ -224,15 +232,12 @@
 
         let blankIndex = Math.floor(Math.random() * players.length);
 
-        // เช็คเงื่อนไขตามโหมดที่เลือก
         if (currentMode === 'anti') {
-            // โหมดลดโอกาสซ้ำ: ถ้าซ้ำกับตาที่แล้ว (และคนเล่นมากกว่า 3 คน) ให้สุ่มใหม่รอบนึง
             if (players.length > 3 && blankIndex === lastImposterIndex) {
                 blankIndex = Math.floor(Math.random() * players.length);
             }
             lastImposterIndex = blankIndex;
         } else {
-            // โหมดสุ่มเพียวๆ รีเซ็ตค่าจำ
             lastImposterIndex = -1;
         }
 
