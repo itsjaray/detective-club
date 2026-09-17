@@ -82,7 +82,6 @@
             -webkit-user-select: text; user-select: text; outline: none;
         }
         
-        /* ปรับความสูงให้โชว์ครบ 4 คนพอดีเป๊ะ (ประมาณ 210px) และเลื่อนเมื่อเกิน 4 คน */
         .names-scroll { 
             max-height: 215px; 
             overflow-y: auto; 
@@ -103,7 +102,15 @@
         .btn-secondary { background: #dcd0b2; color: var(--text-main); border-color: var(--card-border); margin-top: 10px; }
         .screen { display: none; }
         .screen.active { display: block; }
-        .player-scroll { max-height: 240px; overflow-y: auto; margin-bottom: 16px; padding-right: 2px; }
+        
+        /* ปรับความสูงหน้าสมุดบันทึกนักสืบให้โชว์ครบ 4 คนพอดีเป๊ะ (ประมาณ 275px) */
+        .player-scroll { 
+            max-height: 275px; 
+            overflow-y: auto; 
+            margin-bottom: 16px; 
+            padding-right: 2px; 
+        }
+        
         .player-card {
             background: #fdfbf7; border: 1.5px solid var(--card-border);
             padding: 10px 14px; border-radius: 8px; margin-bottom: 8px;
