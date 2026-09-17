@@ -76,12 +76,20 @@
             border-color: #1b2f27;
         }
 
-        /* เพิ่มพื้นที่ด้านบน/ล่างใน input เพื่อไม่ให้สระหรือวรรณยุกต์ชนขอบ */
+        /* แก้ไขระยะห่างและความสูงของ Input เพื่อให้สระบน/สระล่างไม่โดนตัด */
         input[type="number"], input[type="text"] {
-            width: 100%; padding: 10px 14px 6px 14px; border: 2px solid var(--card-border);
-            border-radius: 8px; font-size: 1rem; background: #fdfbf7; color: var(--text-main);
-            -webkit-user-select: text; user-select: text; outline: none;
-            line-height: 1.5;
+            width: 100%; 
+            height: 48px;
+            padding: 8px 14px 2px 14px; 
+            border: 2px solid var(--card-border);
+            border-radius: 8px; 
+            font-size: 1.05rem; 
+            background: #fdfbf7; 
+            color: var(--text-main);
+            -webkit-user-select: text; 
+            user-select: text; 
+            outline: none;
+            line-height: normal;
         }
         
         .names-scroll { 
@@ -93,7 +101,14 @@
         
         .name-input-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
         .name-input-row span { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); min-width: 20px; text-align: right; }
-        .name-input-row input { padding: 8px 12px 4px 12px; font-size: 0.95rem; border-radius: 6px; }
+        
+        /* ช่องรายชื่อผู้เล่นปรับความสูงให้พอดีและเว้นที่บนล่าง */
+        .name-input-row input { 
+            height: 44px;
+            padding: 6px 12px 2px 12px; 
+            font-size: 1rem; 
+            border-radius: 6px; 
+        }
         
         .btn {
             background: var(--primary); color: #f4ebd0; border: 2px solid #1b2f27;
