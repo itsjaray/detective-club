@@ -46,7 +46,6 @@
         .header-action-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
         label { font-weight: 600; font-size: 0.88rem; color: var(--primary); margin: 0; }
         
-        /* ปุ่มล้างชื่อสไตล์ชัดเจน */
         .btn-clear-box {
             background: #e8dcc4; border: 1.5px solid var(--card-border); color: var(--accent);
             font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; cursor: pointer;
@@ -150,6 +149,8 @@
 
 <script>
     let players = []; let secretWord = ""; let roles = []; let viewedStatus = []; let currentPlayerIndex = 0;
+    let lastImposterIndex = -1; // ตัวแปรจำคนที่เป็นตาที่แล้ว เพื่อป้องกันการออกซ้ำติดกัน
+
     function generateNameInputs(keepValues = true) {
         const count = parseInt(document.getElementById('player-count').value) || 4;
         const container = document.getElementById('name-inputs-container');
@@ -179,7 +180,15 @@
         if (wordInput === "") { alert("กรุณากรอกคำใบ้ลับครับ"); return; }
         secretWord = wordInput;
         roles = new Array(players.length).fill(secretWord);
-        const blankIndex = Math.floor(Math.random() * players.length);
+
+        // ระบบสุ่มป้องกันการออกซ้ำคนเดิมติดกัน (ถ้ามีคนเล่นมากกว่า 3 คนขึ้นไป)
+        let blankIndex = Math.floor(Math.random() * players.length);
+        if (players.length > 3 && blankIndex === lastImposterIndex) {
+            // สุ่มใหม่อีกรอบถ้าดันซ้ำกับคนตาที่แล้ว เพื่อความแฟร์
+            blankIndex = Math.floor(Math.random() * players.length);
+        }
+        lastImposterIndex = blankIndex; // บันทึกไว้จำสำหรับตาหน้า
+
         roles[blankIndex] = "❌ คุณคือผู้สมรู้ร่วมคิด!<br><span style='font-size:0.95rem; font-weight:normal; display:inline-block; margin-top:6px;'>คุณไม่มีคำใบ้! ต้องเนียนทำเป็นรู้เรื่อง!</span>";
         viewedStatus = new Array(players.length).fill(false);
         renderPlayerList();
