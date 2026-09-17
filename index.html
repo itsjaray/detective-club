@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Detective Club - ชมรมยอดนักสืบ</title>
-    <!-- ใช้ฟอนต์ Mali ตามที่ต้องการ -->
     <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -24,13 +23,13 @@
             background-color: var(--bg-color);
             background-image: radial-gradient(#3a3027 1px, transparent 1px), radial-gradient(#2d241d 1px, var(--bg-color) 1px);
             background-size: 40px 40px; background-position: 0 0, 20px 20px;
-            color: var(--text-main); margin: 0; padding: 16px;
+            color: var(--text-main); margin: 0; padding: 12px;
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh; min-height: -webkit-fill-available; overflow-x: hidden;
         }
         .container {
             background-color: var(--card-bg); border: 3px solid var(--card-border);
-            padding: 26px 20px; border-radius: 16px;
+            padding: 20px 16px; border-radius: 16px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(140, 109, 72, 0.15);
             width: 100%; max-width: 400px; position: relative;
         }
@@ -40,116 +39,94 @@
             padding: 5px 18px; font-size: 0.85rem; font-weight: 700; border-radius: 6px; border: 1.5px solid #d4af37;
             letter-spacing: 0.5px; white-space: nowrap;
         }
-        h2 { margin-top: 5px; text-align: center; color: var(--primary); font-weight: 700; font-size: 1.6rem; margin-bottom: 4px; text-transform: uppercase; }
-        .subtitle { text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px; line-height: 1.4; }
-        .form-group { margin-bottom: 15px; }
+        h2 { margin-top: 2px; text-align: center; color: var(--primary); font-weight: 700; font-size: 1.5rem; margin-bottom: 2px; text-transform: uppercase; }
+        .subtitle { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px; line-height: 1.3; }
+        .form-group { margin-bottom: 10px; }
         
-        .header-action-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        label { font-weight: 600; font-size: 0.95rem; color: var(--primary); margin: 0; }
+        .header-action-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        label { font-weight: 600; font-size: 0.9rem; color: var(--primary); margin: 0; }
         
         .btn-clear-box {
             background: #e8dcc4; border: 1.5px solid var(--card-border); color: var(--accent);
-            font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; cursor: pointer;
+            font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; cursor: pointer;
         }
         .btn-clear-box:active { background: #dfcfb2; }
 
         .mode-selector {
-            display: flex;
-            gap: 8px;
-            margin-top: 6px;
+            display: flex; gap: 6px; margin-top: 4px;
         }
         .mode-btn {
-            flex: 1;
-            padding: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 2px solid var(--card-border);
-            background: #fdfbf7;
-            color: var(--text-muted);
-            border-radius: 6px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
+            flex: 1; padding: 6px; font-size: 0.8rem; font-weight: 600;
+            border: 2px solid var(--card-border); background: #fdfbf7; color: var(--text-muted);
+            border-radius: 6px; cursor: pointer; text-align: center; transition: all 0.2s;
         }
         .mode-btn.active {
-            background: var(--primary);
-            color: #f4ebd0;
-            border-color: #1b2f27;
+            background: var(--primary); color: #f4ebd0; border-color: #1b2f27;
         }
 
-        /* Input สำหรับฟอนต์ Mali ปรับแก้สระอุไม่ให้จม */
+        /* กล่อง Input ป้องกันสระจมสำหรับ Mali */
         input[type="number"], input[type="text"] {
-            width: 100%; 
-            height: 54px;
-            padding: 6px 14px 12px 14px; 
-            border: 2px solid var(--card-border);
-            border-radius: 8px; 
-            font-size: 1.1rem; 
-            background: #fdfbf7; 
-            color: var(--text-main);
-            -webkit-user-select: text; 
-            user-select: text; 
-            outline: none;
-            line-height: 1.2;
+            width: 100%; height: 46px;
+            padding: 4px 12px 10px 12px; 
+            border: 2px solid var(--card-border); border-radius: 8px; 
+            font-size: 1.05rem; background: #fdfbf7; color: var(--text-main);
+            -webkit-user-select: text; user-select: text; outline: none; line-height: 1.2;
         }
         
+        /* ตั้งค่าให้แสดงพอดี 4 คน (ประมาณ 240px) ถ้าเกิน 5 คนขึ้นไปจะแสดง Scrollbar อัตโนมัติ */
         .names-scroll { 
-            max-height: 220px; 
+            max-height: 236px; 
+            overflow-y: auto; 
+            margin-bottom: 8px; 
+            padding-right: 2px; 
+        }
+        
+        .name-input-row { display: flex; align-items: center; margin-bottom: 6px; gap: 6px; }
+        .name-input-row span { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); min-width: 18px; text-align: right; }
+        
+        .name-input-row input { 
+            height: 44px; padding: 2px 10px 8px 10px; font-size: 1rem; border-radius: 6px; line-height: 1.2;
+        }
+        
+        .btn {
+            background: var(--primary); color: #f4ebd0; border: 2px solid #1b2f27;
+            padding: 12px; width: 100%; border-radius: 8px; font-size: 1rem; font-weight: 700;
+            cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-secondary { background: #dcd0b2; color: var(--text-main); border-color: var(--card-border); margin-top: 8px; }
+        .screen { display: none; }
+        .screen.active { display: block; }
+        
+        /* หน้าสมุดบันทึกนักสืบ: กำหนดความสูงพอดี 4 คนเป๊ะๆ ไม่ต้องสกอร์ */
+        .player-scroll { 
+            max-height: 275px; 
             overflow-y: auto; 
             margin-bottom: 12px; 
             padding-right: 2px; 
         }
         
-        .name-input-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
-        .name-input-row span { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); min-width: 20px; text-align: right; }
-        
-        .name-input-row input { 
-            height: 50px;
-            padding: 4px 12px 10px 12px; 
-            font-size: 1.05rem; 
-            border-radius: 6px; 
-            line-height: 1.2;
-        }
-        
-        .btn {
-            background: var(--primary); color: #f4ebd0; border: 2px solid #1b2f27;
-            padding: 14px; width: 100%; border-radius: 8px; font-size: 1.05rem; font-weight: 700;
-            cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px;
-        }
-        .btn:active { transform: scale(0.97); }
-        .btn-secondary { background: #dcd0b2; color: var(--text-main); border-color: var(--card-border); margin-top: 10px; }
-        .screen { display: none; }
-        .screen.active { display: block; }
-        
-        /* แก้ปัญหาการ์ดล้น: จำกัดความสูงพอดี และให้เลื่อนดูรายชื่อที่เหลือได้โดยไม่ทับปุ่ม */
-        .player-scroll { 
-            max-height: 220px; 
-            overflow-y: auto; 
-            margin-bottom: 14px; 
-            padding-right: 4px; 
-        }
-        
         .player-card {
             background: #fdfbf7; border: 1.5px solid var(--card-border);
-            padding: 10px 14px; border-radius: 8px; margin-bottom: 8px;
+            padding: 8px 12px; border-radius: 8px; margin-bottom: 6px;
             display: flex; justify-content: space-between; align-items: center;
         }
         .player-card.viewed { background: var(--success-bg); border-color: var(--success); }
-        .player-info { display: flex; flex-direction: column; gap: 4px; }
-        .player-name { font-weight: 700; font-size: 1rem; color: var(--primary); }
-        .player-status { font-size: 0.8rem; color: var(--text-muted); }
+        .player-info { display: flex; flex-direction: column; gap: 2px; }
+        .player-name { font-weight: 700; font-size: 0.95rem; color: var(--primary); }
+        .player-status { font-size: 0.75rem; color: var(--text-muted); }
         .player-card.viewed .player-status { color: var(--success); font-weight: 600; }
-        .btn-sm { padding: 6px 12px; font-size: 0.85rem; width: auto; border-radius: 6px; }
+        .btn-sm { padding: 5px 10px; font-size: 0.8rem; width: auto; border-radius: 6px; }
         
         .secret-box {
-            background: #ffffff; border: 2.5px dashed var(--primary); padding: 28px 16px;
-            text-align: center; border-radius: 12px; font-size: 1.5rem; font-weight: 700; color: var(--primary); margin: 18px 0;
-            line-height: 1.5;
+            background: #ffffff; border: 2.5px dashed var(--primary); padding: 24px 16px;
+            text-align: center; border-radius: 12px; font-size: 1.4rem; font-weight: 700; color: var(--primary); margin: 14px 0;
+            line-height: 1.4;
         }
         .secret-box.imposter { background: #fdf2f0; border-color: var(--accent); color: var(--accent); }
         .tap-to-reveal {
             background: #fdfbf7; border: 2px dashed var(--card-border); border-radius: 12px;
-            padding: 30px 20px; text-align: center; margin: 15px 0; cursor: pointer;
+            padding: 24px 16px; text-align: center; margin: 12px 0; cursor: pointer;
         }
     </style>
 </head>
@@ -174,7 +151,7 @@
         <div class="form-group">
             <div class="header-action-row">
                 <label>รายชื่อสมาชิกชมรม</label>
-                <button type="button" class="btn-clear-box" onclick="clearAllNames()">🗑️ ล้างชื่อทั้งหมด</button>
+                <button type="button" class="btn-clear-box" onclick="clearAllNames()">🗑️ ล้างทั้งหมด</button>
             </div>
             <div class="names-scroll" id="name-inputs-container"></div>
         </div>
@@ -197,9 +174,9 @@
         <h2 id="current-player-title">ชื่อนักสืบ</h2>
         <div class="subtitle">แตะที่กรอบด้านล่างเพื่อส่องดูหลักฐาน</div>
         <div id="hidden-view" class="tap-to-reveal" onclick="showSecret()">
-            <div style="font-size: 2.2rem; margin-bottom: 6px;">🔍</div>
-            <div style="font-weight: 700; color: var(--primary); font-size: 1rem;">แตะเพื่อส่องดูคำใบ้ลับ</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">ระวังผู้สมรู้ร่วมคิดแอบมองนะ!</div>
+            <div style="font-size: 2rem; margin-bottom: 4px;">🔍</div>
+            <div style="font-weight: 700; color: var(--primary); font-size: 0.95rem;">แตะเพื่อส่องดูคำใบ้ลับ</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">ระวังผู้สมรู้ร่วมคิดแอบมองนะ!</div>
         </div>
         <div id="secret-view" style="display: none;">
             <div class="secret-box" id="secret-display">คำลับ</div>
@@ -208,10 +185,10 @@
     </div>
 
     <div id="done-screen" class="screen" style="text-align: center;">
-        <div style="font-size: 3.5rem; margin-bottom: 10px;">🕵️‍♂️✨</div>
+        <div style="font-size: 3rem; margin-bottom: 8px;">🕵️‍♂️✨</div>
         <h2>หลักฐานพร้อมแล้ว!</h2>
         <div class="subtitle">ทุกคนได้รับเบาะแสครบถ้วนแล้ว ใครคือคนเนียนที่ไม่มีเบาะแส ไปเริ่มจับผิดกันเลย!</div>
-        <button class="btn" style="margin-top: 15px;" onclick="resetGame()">🔄 เริ่มเล่นคดีใหม่</button>
+        <button class="btn" style="margin-top: 12px;" onclick="resetGame()">🔄 เริ่มเล่นคดีใหม่</button>
     </div>
 </div>
 
@@ -267,7 +244,7 @@
             lastImposterIndex = -1;
         }
 
-        roles[blankIndex] = "❌ คุณคือผู้สมรู้ร่วมคิด!<br><span style='font-size:1rem; font-weight:normal; display:inline-block; margin-top:6px;'>คุณไม่มีคำใบ้! ต้องเนียนทำเป็นรู้เรื่อง!</span>";
+        roles[blankIndex] = "❌ คุณคือผู้สมรู้ร่วมคิด!<br><span style='font-size:0.95rem; font-weight:normal; display:inline-block; margin-top:4px;'>คุณไม่มีคำใบ้! ต้องเนียนทำเป็นรู้เรื่อง!</span>";
         viewedStatus = new Array(players.length).fill(false);
         renderPlayerList();
         switchScreen('players-screen');
