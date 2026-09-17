@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Detective Club - ชมรมยอดนักสืบ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #1f1a17;
+            --card-bg: #f4ebd0;
+            --card-border: #8c6d48;
+            --primary: #2c4a3e;
+            --primary-hover: #1b2f27;
+            --accent: #b85d33;
+            --text-main: #2b231d;
+            --text-muted: #6b5b4e;
+            --success: #386641;
+            --success-bg: rgba(56, 102, 65, 0.12);
+        }
+        * { box-sizing: border-box; font-family: 'Prompt', sans-serif; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#3a3027 1px, transparent 1px), radial-gradient(#2d241d 1px, var(--bg-color) 1px);
+            background-size: 40px 40px; background-position: 0 0, 20px 20px;
+            color: var(--text-main); margin: 0; padding: 16px;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; min-height: -webkit-fill-available; overflow-x: hidden;
+        }
+        .container {
+            background-color: var(--card-bg); border: 3px solid var(--card-border);
+            padding: 26px 20px; border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(140, 109, 72, 0.15);
+            width: 100%; max-width: 400px; position: relative;
+        }
+        .container::before {
+            content: "🕵️‍♂️ DETECTIVE CLUB"; position: absolute; top: -12px; left: 50%;
+            transform: translateX(-50%); background: var(--primary); color: #f4ebd0;
+            padding: 2px 14px; font-size: 0.7rem; font-weight: 700; border-radius: 4px; border: 1px solid #d4af37;
+        }
+        h2 { margin-top: 5px; text-align: center; color: var(--primary); font-weight: 700; font-size: 1.5rem; margin-bottom: 4px; text-transform: uppercase; }
+        .subtitle { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 18px; line-height: 1.4; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.88rem; color: var(--primary); }
+        input[type="number"], input[type="text"] {
+            width: 100%; padding: 12px 14px; border: 2px solid var(--card-border);
+            border-radius: 8px; font-size: 0.95rem; background: #fdfbf7; color: var(--text-main);
+            -webkit-user-select: text; user-select: text; outline: none;
+        }
+        .names-scroll { max-height: 160px; overflow-y: auto; margin-bottom: 12px; padding-right: 2px; }
+        .name-input-row { display: flex; align-items: center; margin-bottom: 6px; gap: 8px; }
+        .name-input-row span { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); min-width: 20px; text-align: right; }
+        .name-input-row input { padding: 8px 12px; font-size: 0.9rem; border-radius: 6px; }
+        .btn {
+            background: var(--primary); color: #f4ebd0; border: 2px solid #1b2f27;
+            padding: 14px; width: 100%; border-radius: 8px; font-size: 1rem; font-weight: 700;
+            cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-secondary { background: #dcd0b2; color: var(--text-main); border-color: var(--card-border); margin-top: 10px; }
+        .screen { display: none; }
+        .screen.active { display: block; }
+        .player-scroll { max-height: 240px; overflow-y: auto; margin-bottom: 16px; }
+        .player-card {
+            background: #fdfbf7; border: 1.5px solid var(--card-border);
+            padding: 10px 14px; border-radius: 8px; margin-bottom: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .player-card.viewed { background: var(--success-bg); border-color: var(--success); }
+        .player-name { font-weight: 700; font-size: 0.92rem; color: var(--primary); }
+        .player-status { font-size: 0.72rem; color: var(--text-muted); }
+        .player-card.viewed .player-status { color: var(--success); font-weight: 600; }
+        .btn-sm { padding: 6px 12px; font-size: 0.78rem; width: auto; border-radius: 6px; }
+        .secret-box {
+            background: #ffffff; border: 2px dashed var(--primary); padding: 22px 16px;
+            text-align: center; border-radius: 10px; font-size: 1.15rem; font-weight: 700; color: var(--primary); margin: 18px 0;
+        }
+        .secret-box.imposter { background: #fdf2f0; border-color: var(--accent); color: var(--accent); }
+        .tap-to-reveal {
+            background: #fdfbf7; border: 2px dashed var(--card-border); border-radius: 12px;
+            padding: 30px 20px; text-align: center; margin: 15px 0; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="setup-screen" class="screen active">
+        <h2>บันทึกคดีลับ</h2>
+        <div class="subtitle">ระบุจำนวนนักสืบและรายชื่อเพื่อเริ่มสืบสวน</div>
+        <div class="form-group">
+            <label for="player-count">จำนวนนักสืบ (คน)</label>
+            <input type="number" id="player-count" pattern="[0-9]*" inputmode="numeric" min="3" max="15" value="4" oninput="generateNameInputs()">
+        </div>
+        <div class="form-group">
+            <label>รายชื่อสมาชิกชมรม</label>
+            <div class="names-scroll" id="name-inputs-container"></div>
+        </div>
+        <div class="form-group">
+            <label for="secret-word">คำใบ้ลับประจำรอบ</label>
+            <input type="text" id="secret-word" placeholder="เช่น หอไอเฟล, กาแฟ, อวกาศ">
+        </div>
+        <button class="btn" onclick="startGame()">🔍 เริ่มสืบสวนคดี</button>
+    </div>
+
+    <div id="players-screen" class="screen">
+        <h2>สมุดบันทึกนักสืบ</h2>
+        <div class="subtitle">ส่งเครื่องให้สมาชิกทีละคนเปิดดูคำลับ แล้วซ่อนก่อนส่งต่อ</div>
+        <div class="player-scroll" id="player-list-container"></div>
+        <button class="btn" id="finish-btn" style="display:none;" onclick="showAllDone()">🔎 ทุกคนเปิดดูครบแล้ว เริ่มจับผิดกัน!</button>
+        <button class="btn btn-secondary" onclick="resetGame()">⚙️ ตั้งค่าคดีใหม่</button>
+    </div>
+
+    <div id="reveal-screen" class="screen">
+        <h2 id="current-player-title">ชื่อนักสืบ</h2>
+        <div class="subtitle">แตะที่กรอบด้านล่างเพื่อส่องดูหลักฐาน</div>
+        <div id="hidden-view" class="tap-to-reveal" onclick="showSecret()">
+            <div style="font-size: 2.2rem; margin-bottom: 6px;">🔍</div>
+            <div style="font-weight: 700; color: var(--primary); font-size: 0.95rem;">แตะเพื่อส่องดูคำใบ้ลับ</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">ระวังผู้สมรู้ร่วมคิดแอบมองนะ!</div>
+        </div>
+        <div id="secret-view" style="display: none;">
+            <div class="secret-box" id="secret-display">คำลับ</div>
+            <button class="btn" onclick="hideSecretAndBack()">จำหลักฐานแล้ว ปิดสมุด 🕵️‍♂️</button>
+        </div>
+    </div>
+
+    <div id="done-screen" class="screen" style="text-align: center;">
+        <div style="font-size: 3.5rem; margin-bottom: 10px;">🕵️‍♂️✨</div>
+        <h2>หลักฐานพร้อมแล้ว!</h2>
+        <div class="subtitle">ทุกคนได้รับเบาะแสครบถ้วนแล้ว ใครคือคนเนียนที่ไม่มีเบาะแส ไปเริ่มจับผิดกันเลย!</div>
+        <button class="btn" style="margin-top: 15px;" onclick="resetGame()">🔄 เริ่มเล่นคดีใหม่</button>
+    </div>
+</div>
+
+<script>
+    let players = []; let secretWord = ""; let roles = []; let viewedStatus = []; let currentPlayerIndex = 0;
+    function generateNameInputs() {
+        const count = parseInt(document.getElementById('player-count').value) || 4;
+        const container = document.getElementById('name-inputs-container');
+        const oldInputs = container.querySelectorAll('input');
+        const oldNames = Array.from(oldInputs).map(input => input.value);
+        container.innerHTML = "";
+        for (let i = 0; i < count; i++) {
+            const row = document.createElement('div');
+            row.className = 'name-input-row';
+            const defaultName = oldNames[i] || `นักสืบ ${i + 1}`;
+            row.innerHTML = `<span>${i + 1}.</span><input type="text" class="player-name-input" value="${defaultName}">`;
+            container.appendChild(row);
+        }
+    }
+    window.onload = function() { generateNameInputs(); };
+    function startGame() {
+        const wordInput = document.getElementById('secret-word').value.trim();
+        const nameInputs = document.querySelectorAll('.player-name-input');
+        players = [];
+        nameInputs.forEach((input, index) => { players.push(input.value.trim() || `นักสืบ ${index + 1}`); });
+        if (players.length < 3) { alert("กรุณาใส่จำนวนคนเล่นอย่างน้อย 3 คนครับ"); return; }
+        if (wordInput === "") { alert("กรุณากรอกคำใบ้ลับครับ"); return; }
+        secretWord = wordInput;
+        roles = new Array(players.length).fill(secretWord);
+        const blankIndex = Math.floor(Math.random() * players.length);
+        roles[blankIndex] = "❌ คุณคือผู้สมรู้ร่วมคิด!<br><span style='font-size:0.85rem; font-weight:normal;'>คุณไม่มีคำใบ้! ต้องเนียนทำเป็นรู้เรื่อง!</span>";
+        viewedStatus = new Array(players.length).fill(false);
+        renderPlayerList();
+        switchScreen('players-screen');
+    }
+    function renderPlayerList() {
+        const container = document.getElementById('player-list-container');
+        container.innerHTML = "";
+        let allViewed = true;
+        for (let i = 0; i < players.length; i++) {
+            const isViewed = viewedStatus[i];
+            if (!isViewed) allViewed = false;
+            const div = document.createElement('div');
+            div.className = `player-card ${isViewed ? 'viewed' : ''}`;
+            div.innerHTML = `<div class="player-info"><span class="player-name">${players[i]}</span><span class="player-status">${isViewed ? 'ส่องแล้ว ✓' : 'ยังไม่ดู'}</span></div><button class="btn btn-sm ${isViewed ? 'btn-secondary' : ''}" onclick="openPlayer(${i})">${isViewed ? 'ดูซ้ำ' : 'ส่องคำ'}</button>`;
+            container.appendChild(div);
+        }
+        document.getElementById('finish-btn').style.display = allViewed ? 'flex' : 'none';
+    }
+    function openPlayer(index) {
+        currentPlayerIndex = index; viewedStatus[index] = true;
+        document.getElementById('current-player-title').innerText = players[index];
+        document.getElementById('hidden-view').style.display = 'block';
+        document.getElementById('secret-view').style.display = 'none';
+        switchScreen('reveal-screen');
+    }
+    function showSecret() {
+        document.getElementById('hidden-view').style.display = 'none';
+        const secretBox = document.getElementById('secret-display');
+        const content = roles[currentPlayerIndex];
+        secretBox.innerHTML = content;
+        secretBox.className = content.includes("❌") ? "secret-box imposter" : "secret-box";
+        document.getElementById('secret-view').style.display = 'block';
+    }
+    function hideSecretAndBack() { renderPlayerList(); switchScreen('players-screen'); }
+    function showAllDone() { switchScreen('done-screen'); }
+    function switchScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+        window.scrollTo(0, 0);
+    }
+    function resetGame() { switchScreen('setup-screen'); }
+</script>
+</body>
+</html>
