@@ -19,19 +19,25 @@
             --success-bg: rgba(56, 102, 65, 0.12);
         }
         * { box-sizing: border-box; font-family: 'Mali', cursive, sans-serif; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
-        body {
+        
+        /* ล็อกไม่ให้หน้าเว็บหลักเด้งหรือรีเฟรชเวลาดึงลงบน iPhone */
+        html, body {
             background-color: var(--bg-color);
             background-image: radial-gradient(#3a3027 1px, transparent 1px), radial-gradient(#2d241d 1px, var(--bg-color) 1px);
             background-size: 40px 40px; background-position: 0 0, 20px 20px;
             color: var(--text-main); margin: 0; padding: 12px;
             display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; min-height: -webkit-fill-available; overflow-x: hidden;
+            min-height: 100vh; min-height: -webkit-fill-available; 
+            overflow: hidden; /* ป้องกันหน้าจอหลักเลื่อนทะลุ */
+            overscroll-behavior-y: none; /* ป้องกันการดึงรีเฟรชของ Safari */
         }
+
         .container {
             background-color: var(--card-bg); border: 3px solid var(--card-border);
             padding: 20px 16px; border-radius: 16px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(140, 109, 72, 0.15);
             width: 100%; max-width: 400px; position: relative;
+            max-height: 95vh; display: flex; flex-direction: column;
         }
         .container::before {
             content: "🕵️‍♂️ DETECTIVE CLUB"; position: absolute; top: -16px; left: 50%;
@@ -72,12 +78,12 @@
             -webkit-user-select: text; user-select: text; outline: none; line-height: 1.2;
         }
         
-        /* หน้าตั้งค่า: 4 คนแรกแสดงพอดี ถ้าเกิน 5 คนค่อย Scroll */
         .names-scroll { 
             max-height: 236px; 
             overflow-y: auto; 
             margin-bottom: 8px; 
             padding-right: 2px; 
+            overscroll-behavior: contain;
         }
         
         .name-input-row { display: flex; align-items: center; margin-bottom: 6px; gap: 6px; }
@@ -91,18 +97,19 @@
             background: var(--primary); color: #f4ebd0; border: 2px solid #1b2f27;
             padding: 12px; width: 100%; border-radius: 8px; font-size: 1rem; font-weight: 700;
             cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px;
+            flex-shrink: 0;
         }
         .btn:active { transform: scale(0.97); }
         .btn-secondary { background: #dcd0b2; color: var(--text-main); border-color: var(--card-border); margin-top: 8px; }
         .screen { display: none; }
         .screen.active { display: block; }
         
-        /* หน้าสมุดบันทึกนักสืบ: 4 คนแรกแสดงครบถ้วน ไม่บังคับจำกัดความสูงจนล้น 5 คนขึ้นไปค่อยเลื่อน */
         .player-scroll { 
             max-height: 310px; 
             overflow-y: auto; 
             margin-bottom: 12px; 
             padding-right: 2px; 
+            overscroll-behavior: contain;
         }
         
         .player-card {
@@ -196,6 +203,24 @@
     let currentMode = 'pure'; 
     let lastImposterIndex = -1; 
 
+    // ป้องกันการดึงหน้าจอลงเพื่อรีเฟรชบน iPhone (Safari)
+    document.addEventListener('touchmove', function(e) {
+        if (e.scale !== 1) { return; }
+        // อนุญาตให้เลื่อนเฉพาะในกล่อง scroll เท่านั้น ส่วนอื่นห้ามดึงรีเฟรช
+        let target = e.target;
+        let isScrollable = false;
+        while (target !== document.body && target !== null) {
+            if (target.classList && (target.classList.contains('names-scroll') || target.classList.contains('player-scroll'))) {
+                isScrollable = true;
+                break;
+            }
+            target = target.parentElement;
+        }
+        if (!isScrollable) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
     function setMode(mode) {
         currentMode = mode;
         document.getElementById('mode-pure').classList.toggle('active', mode === 'pure');
@@ -226,6 +251,7 @@
         const wordInput = document.getElementById('secret-word').value.trim();
         const nameInputs = document.querySelectorAll('.player-name-input');
         players = [];
+        nameInputs.force = false;
         nameInputs.forEach((input, index) => { players.push(input.value.trim() || `นักสืบ ${index + 1}`); });
         if (players.length < 3) { alert("กรุณาใส่จำนวนคนเล่นอย่างน้อย 3 คนครับ"); return; }
         if (wordInput === "") { alert("กรุณากรอกคำใบ้ลับครับ"); return; }
