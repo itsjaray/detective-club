@@ -64,7 +64,6 @@
             background: var(--primary); color: #f4ebd0; border-color: #1b2f27;
         }
 
-        /* กล่อง Input ป้องกันสระจมสำหรับ Mali */
         input[type="number"], input[type="text"] {
             width: 100%; height: 46px;
             padding: 4px 12px 10px 12px; 
@@ -73,7 +72,7 @@
             -webkit-user-select: text; user-select: text; outline: none; line-height: 1.2;
         }
         
-        /* ตั้งค่าให้แสดงพอดี 4 คน (ประมาณ 240px) ถ้าเกิน 5 คนขึ้นไปจะแสดง Scrollbar อัตโนมัติ */
+        /* หน้าตั้งค่า: 4 คนแรกแสดงพอดี ถ้าเกิน 5 คนค่อย Scroll */
         .names-scroll { 
             max-height: 236px; 
             overflow-y: auto; 
@@ -98,9 +97,9 @@
         .screen { display: none; }
         .screen.active { display: block; }
         
-        /* หน้าสมุดบันทึกนักสืบ: กำหนดความสูงพอดี 4 คนเป๊ะๆ ไม่ต้องสกอร์ */
+        /* หน้าสมุดบันทึกนักสืบ: 4 คนแรกแสดงครบถ้วน ไม่บังคับจำกัดความสูงจนล้น 5 คนขึ้นไปค่อยเลื่อน */
         .player-scroll { 
-            max-height: 275px; 
+            max-height: 310px; 
             overflow-y: auto; 
             margin-bottom: 12px; 
             padding-right: 2px; 
