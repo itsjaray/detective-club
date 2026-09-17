@@ -60,16 +60,24 @@
         .btn-secondary { background: #dcd0b2; color: var(--text-main); border-color: var(--card-border); margin-top: 10px; }
         .screen { display: none; }
         .screen.active { display: block; }
-        .player-scroll { max-height: 240px; overflow-y: auto; margin-bottom: 16px; }
+        .player-scroll { max-height: 240px; overflow-y: auto; margin-bottom: 16px; padding-right: 2px; }
         .player-card {
             background: #fdfbf7; border: 1.5px solid var(--card-border);
             padding: 10px 14px; border-radius: 8px; margin-bottom: 8px;
             display: flex; justify-content: space-between; align-items: center;
         }
         .player-card.viewed { background: var(--success-bg); border-color: var(--success); }
+        
+        /* แก้ไขส่วนจัดระยะห่างชื่อกับสถานะ */
+        .player-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px; /* เพิ่มระยะห่างระหว่างชื่อกับสถานะ */
+        }
         .player-name { font-weight: 700; font-size: 0.92rem; color: var(--primary); }
-        .player-status { font-size: 0.72rem; color: var(--text-muted); }
+        .player-status { font-size: 0.75rem; color: var(--text-muted); }
         .player-card.viewed .player-status { color: var(--success); font-weight: 600; }
+        
         .btn-sm { padding: 6px 12px; font-size: 0.78rem; width: auto; border-radius: 6px; }
         .secret-box {
             background: #ffffff; border: 2px dashed var(--primary); padding: 22px 16px;
